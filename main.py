@@ -1,6 +1,7 @@
 from http.server import BaseHTTPRequestHandler
 import urllib.parse
 import requests
+from bs4 import BeautifulSoup
 
 class handler(BaseHTTPRequestHandler):
 
@@ -22,7 +23,11 @@ class handler(BaseHTTPRequestHandler):
         response = requests.get(f'https://vortaro.net/py/serchi.py?simpla=1&s={word}')
         data = response.text
 
-        if not data:
+        # Remove HTML tags using BeautifulSoup
+        soup = BeautifulSoup(data, 'html.parser')
+        text = soup.get_text()
+
+        if not text.strip():
             self.send_response(404)
             self.send_header('Content-type','text/plain; charset=utf-8')
             self.end_headers()
@@ -33,6 +38,6 @@ class handler(BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header('Content-type','text/plain; charset=utf-8')
         self.end_headers()
-        self.wfile.write(data.encode('utf-8'))
+        self.wfile.write(text.encode('utf-8'))
 
         return
