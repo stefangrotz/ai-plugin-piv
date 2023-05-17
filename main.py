@@ -9,7 +9,7 @@ class handler(BaseHTTPRequestHandler):
         # Parse query parameters
         path, _, query_string = self.path.partition('?')
         params = urllib.parse.parse_qs(query_string)
-        word = params.get('word', [''])[0]  # Use the 'word' parameter value if it exists, or '' if it doesn't
+        word = params.get('word', [''])[0]
 
         if not word:
             # Send an error message if the 'word' parameter is missing
@@ -25,6 +25,10 @@ class handler(BaseHTTPRequestHandler):
 
         # Remove HTML tags using BeautifulSoup
         soup = BeautifulSoup(data, 'html.parser')
+
+        # Remove span elements with class 's'
+        for span in soup.find_all('span', {'class': 's'}):
+            span.decompose()
 
         # Select only the main article content
         article = soup.find(id='trovoj')
