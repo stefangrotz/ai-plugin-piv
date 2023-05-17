@@ -16,7 +16,7 @@ class handler(BaseHTTPRequestHandler):
             self.send_response(400)
             self.send_header('Content-type','text/plain; charset=utf-8')
             self.end_headers()
-            self.wfile.write('Error: Missing "word" parameter. Please provide a word to search for!'.encode('utf-8'))
+            self.wfile.write('Error: Missing "word" parameter. Please provide a word to search for like this: /api/?word=ekzemplo'.encode('utf-8'))
             return
 
         # Fetch data from the PIV
