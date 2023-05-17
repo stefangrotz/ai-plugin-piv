@@ -25,10 +25,16 @@ class handler(BaseHTTPRequestHandler):
 
         # Remove HTML tags using BeautifulSoup
         soup = BeautifulSoup(data, 'html.parser')
-        text = soup.get_text()
 
-        # Remove empty lines
-        text = "\n".join(line for line in text.splitlines() if line.strip())
+        # Select only the main article content
+        article = soup.find(id='trovoj')
+
+        if article:
+            text = article.get_text()
+            # Remove empty lines
+            text = "\n".join(line for line in text.splitlines() if line.strip())
+        else:
+            text = ''
 
         if not text.strip():
             self.send_response(404)
